@@ -66,10 +66,10 @@
 	<div id="container">
 		<!-- <img src="images/cat.jpg"> -->
 	</div>
-	<!-- <input type="button" name="" onclick="start()" value="start"> -->h
+	<!-- <input type="button" name="" onclick="start()" value="start"> -->
 </body>
 <script type="text/javascript">
-	let items;
+	let originItems = [];
 
 	window.onload = function(){
 		const frag = document.createDocumentFragment();
@@ -95,7 +95,10 @@
 			}
 		}
 		document.getElementById('container').appendChild(frag);
-		items = document.getElementsByClassName("item");
+		//originItems = document.getElementsByClassName("item");
+		for(const item of document.getElementsByClassName("item")){
+			originItems.push(item.id);
+		}
 		//start();
 	}
 
@@ -107,7 +110,7 @@
 			ids.push(i);
 		}
 		
-		console.log(ids);
+		//console.log(ids);
 
 		do{
 			ids = shuffle(ids);
@@ -115,15 +118,22 @@
 
 		const items = document.getElementsByClassName("item");
 
-		for(let i = 0; i < items.length-1; i++){
-			const item = items[i];
-			//console.log(ids[i]);
-			item.id = "item" + ids[i];
+		for(let i in items) {
+			if (items[i].id != "empty") {
+				items[i].id = "item" + ids[i];
+			}
 		}
+
+		// for(let i = 0; i < items.length-1; i++){
+		// 	const item = items[i];
+		// 	//console.log(ids[i]);
+		// 	item.id = "item" + ids[i];
+		// }
 
 	}
 
 	function move(item){
+		const items = document.getElementsByClassName("item");
 		const empty = document.getElementById("empty");
 		if (isAdjacent(empty,item)) {
 			empty.id = item.id;
@@ -133,9 +143,9 @@
 			item.innerHTML = "item9";
 			empty.innerHTML = empty.id;
 
-			if (checkResult()) {
+			if (checkResult(items)) {
 				console.log("Good");
-				const items = document.getElementsByClassName("item");
+				
 				for(const i of items){
 					i.innerHTML = "";
 					if (i.id == "empty") {
@@ -181,8 +191,8 @@
 		}
 	}
 
-	function checkResult(){
-		const items = document.getElementsByClassName("item");
+	function checkResult(items){
+		//const items = document.getElementsByClassName("item");
 		let ids = [];
 		
 		for (const item of items) {
@@ -195,23 +205,25 @@
 		// }
 		//console.log(ids);
 
-		if (arrayEquals(ids)) {
+		//console.log(arrayEquals(originItems,ids));
+
+		if (arrayEquals(originItems,ids)) {
 			return true;
 		}
 
 		return false;
 	}
 
-	function arrayEquals(b) {
-		let a = [];
-		for(let i = 1;i<10;i++){
-			if (i == 9) {
-				a.push("empty");
-			}
-			else{
-				a.push("item"+i);
-			}
-		}
+	function arrayEquals(a,b) {
+		// let a = [];
+		// for(let i = 1;i<10;i++){
+		// 	if (i == 9) {
+		// 		a.push("empty");
+		// 	}
+		// 	else{
+		// 		a.push("item"+i);
+		// 	}
+		// }
 		//console.log(a);
 		//console.log(b);
   		return Array.isArray(a) &&
