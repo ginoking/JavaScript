@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<style type="text/css">
+	#container div {
+		width: 205px;
+		height: 135px;
+		background-image: url('images/cat.jpg');
+		background-repeat: no-repeat;
+		position: absolute;
+	}
+	.row1 {
+		top: 0
+	}
+	.row2 {
+		top: 136px;
+	}
+	.row3 {
+		top: 272px;
+	}
+	.col1 {
+		left: 0;
+	}
+	.col2 {
+		left: 206px;
+	}
+	.col3 {
+		left: 412px;
+	}
+	#item1 {
+		content: "1";
+		background-position: -0px 0px;
+	}
+	#item2 {
+		background-position: -205px 0px
+	}
+	#item3 {
+		background-position: -410px 0px;
+	}
+	#item4 {
+		background-position: -0px -135px;
+	}
+	#item5 {
+		background-position: -205px -135px
+	}
+	#item6 {
+		background-position: -410px -135px;
+	}
+	#item7 {
+		background-position: -0px -270px;
+	}
+	#item8 {
+		background-position: -205px -270px
+	}
+	#item9 {
+		background-position: -410px -270px
+	}
+	#empty {
+		background-image: none!important;
+	}
+
+</style>
+<body>
+	<div id="container">
+		<!-- <img src="images/cat.jpg"> -->
+	</div>
+	<!-- <input type="button" name="" onclick="start()" value="start"> -->h
+</body>
+<script type="text/javascript">
+	let items;
+
+	window.onload = function(){
+		const frag = document.createDocumentFragment();
+		let n = 1;
+
+		for(let i = 1; i <= 3; i++){
+			for(let j = 1; j <= 3; j++) {
+				const item = document.createElement("div");
+				if (i == 3 && j == 3) {
+					item.setAttribute("id", "empty");
+	                item.setAttribute("class", "item row" + i + " col" + j);
+				}
+				else{
+					item.setAttribute("id", "item" + (n));
+	                item.setAttribute("class", "item row" + i + " col" + j);
+	                item.setAttribute("onclick", "move(this)");
+				}
+				//item.innerHTML = n;
+
+				frag.appendChild(item);
+				
+                n++;
+			}
+		}
+		document.getElementById('container').appendChild(frag);
+		items = document.getElementsByClassName("item");
+		//start();
+	}
+
+	//const items = document.getElementsByClassName("item");
+
+	function start(){
+		let ids = [];
+		for(let i = 1;i < 9;i++){
+			ids.push(i);
+		}
+		
+		console.log(ids);
+
+		do{
+			ids = shuffle(ids);
+		}while(checkHasResult(ids));
+
+		const items = document.getElementsByClassName("item");
+
+		for(let i = 0; i < items.length-1; i++){
+			const item = items[i];
+			//console.log(ids[i]);
+			item.id = "item" + ids[i];
+		}
+
+	}
+
+	function move(item){
+		const empty = document.getElementById("empty");
+		if (isAdjacent(empty,item)) {
+			empty.id = item.id;
+			item.id = "empty";
+			item.setAttribute("onclick","");
+			empty.setAttribute("onclick","move(this)");
+			item.innerHTML = "item9";
+			empty.innerHTML = empty.id;
+
+			if (checkResult()) {
+				console.log("Good");
+				const items = document.getElementsByClassName("item");
+				for(const i of items){
+					i.innerHTML = "";
+					if (i.id == "empty") {
+						i.id = "item9";
+					}
+				}
+			}
+		}
+	}
+
+	function checkHasResult(arr){
+		let n = 0;
+		for(let i=0;i<arr.length;i++){
+			if (i != 0) {
+				if (arr[i] > arr[i-1]) {
+					n++;
+				}
+			}
+		}
+
+		if (n % 2 == 0) { return true }
+		return false;	
+	}
+
+	function isAdjacent(empty, item){
+		const emptyRow = parseInt(empty.className.split(" ")[1].split("row")[1]);
+		const emptyCol = parseInt(empty.className.split(" ")[2].split("col")[1]);
+		const itemRow = parseInt(item.className.split(" ")[1].split("row")[1]);
+		const itemCol = parseInt(item.className.split(" ")[2].split("col")[1]);
+		if (emptyRow == itemRow || emptyCol == itemCol) {
+			if (emptyCol+1 == itemCol || emptyCol-1 == itemCol) {
+				return true
+			}
+
+			if (emptyRow+1 == itemRow || emptyRow-1 == itemRow) {
+				return true
+			}
+
+			return false;
+		}
+		else{
+			return false;
+		}
+	}
+
+	function checkResult(){
+		const items = document.getElementsByClassName("item");
+		let ids = [];
+		
+		for (const item of items) {
+			//console.log(item.id);
+  			ids.push(item.id) ;
+		}
+		// for(let i in items){
+		// 	//console.log(i);
+		// 	ids.push = items[i].id;
+		// }
+		//console.log(ids);
+
+		if (arrayEquals(ids)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	function arrayEquals(b) {
+		let a = [];
+		for(let i = 1;i<10;i++){
+			if (i == 9) {
+				a.push("empty");
+			}
+			else{
+				a.push("item"+i);
+			}
+		}
+		//console.log(a);
+		//console.log(b);
+  		return Array.isArray(a) &&
+	    Array.isArray(b) &&
+	    a.length === b.length &&
+	    a.every((val, index) => val === b[index]);
+	}
+
+	function shuffle(arr) {
+	    var i,
+	        j,
+	        temp;
+	    for (i = arr.length - 1; i > 0; i--) {
+	        j = Math.floor(Math.random() * (i + 1));
+	        temp = arr[i];
+	        arr[i] = arr[j];
+	        arr[j] = temp;
+	    }
+	    return arr;
+	};
+</script>
+</html>
