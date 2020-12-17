@@ -62,6 +62,7 @@
 
 		do{
 			ids = shuffle(ids);
+			//如果不是偶排序就會沒有結果
 		}while(checkHasResult(ids));
 
 		const items = document.getElementsByClassName("item");
@@ -81,11 +82,13 @@
 	}
 
 	function move(item){
+		//如果還沒開始或已經結束
 		if(!startStatus || endStatus){
 			return;
 		}
 		const items = document.getElementsByClassName("item");
 		const empty = document.getElementById("empty");
+		//空白格相鄰的區塊才可以移動
 		if (isAdjacent(empty,item)) {
 			empty.id = item.id;
 			item.id = "empty";
