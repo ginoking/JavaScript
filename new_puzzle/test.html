@@ -5,13 +5,17 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
+	<div id="message" style="display: none;">Success</div>
+	<input type="button" name="" onclick="start(this)" value="start">
 	<div id="container">
 		<!-- <img src="images/cat.jpg"> -->
 	</div>
-	<!-- <input type="button" name="" onclick="start()" value="start"> -->
+	
 </body>
 <script type="text/javascript">
 	let originItems = [];
+	let startStatus = false;
+	let endStatus = false;
 
 	window.onload = function(){
 		const frag = document.createDocumentFragment();
@@ -42,11 +46,13 @@
 			originItems.push(item.id);
 		}
 		//start();
+
 	}
 
 	//const items = document.getElementsByClassName("item");
 
-	function start(){
+	function start(btn){
+		btn.style.display = "none";
 		let ids = [];
 		for(let i = 1;i < 9;i++){
 			ids.push(i);
@@ -71,10 +77,13 @@
 		// 	//console.log(ids[i]);
 		// 	item.id = "item" + ids[i];
 		// }
-
+		startStatus = true;
 	}
 
 	function move(item){
+		if(!startStatus || endStatus){
+			return;
+		}
 		const items = document.getElementsByClassName("item");
 		const empty = document.getElementById("empty");
 		if (isAdjacent(empty,item)) {
@@ -86,14 +95,17 @@
 			empty.innerHTML = empty.id;
 
 			if (checkResult(items)) {
-				console.log("Good");
-				
+				// console.log("Good");
+				const message = document.getElementById("message");
+				//console.log(message);
+				message.style.display = "block";
 				for(const i of items){
 					i.innerHTML = "";
 					if (i.id == "empty") {
 						i.id = "item9";
 					}
 				}
+				endStatus = true;
 			}
 		}
 	}
