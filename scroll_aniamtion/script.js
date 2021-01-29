@@ -9,7 +9,7 @@ function checkBoxes(){
 	const triggerBottom = window.innerHeight * 0.8;
 
 	boxes.forEach(box => {
-		//得到該元素俱利最上面的值
+		//get element height from window
 		const boxTop = box.getBoundingClientRect().top;
 
 		if (boxTop < triggerBottom) {
