@@ -17,6 +17,7 @@ buttons.forEach(button => {
 		circle.style.top = yInside + 'px'
 		circle.style.left = xInside + 'px'
 
+		//this只適用在一般的function寫法，不適用arrow function
 		this.appendChild(circle)
 
 		setTimeout(() => circle.remove(), 500)
