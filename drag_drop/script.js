@@ -21,6 +21,7 @@ empies.forEach(empty => {
 })
 
 function dragStart() {
+	//this = fill
 	this.className += ' hold'
 	setTimeout(() => this.className = 'invisible', 0)
 }
@@ -43,6 +44,7 @@ function dragEnter(e) {
 }
 
 function dragDrop() {
+	//this = fill
 	this.className = 'empty'
 	this.append(fill)
 }
